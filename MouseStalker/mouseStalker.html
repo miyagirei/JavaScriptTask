@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="MouseStyle.css">
+</head>
+    <body>
+        <div id="stkr"></div>
+        <div class="links">
+            <div><a href="#" class="stkr-target" data-color="color1">テスト1</a></div>
+            <div><a href="#" class="stkr-target" data-color="color2">テスト2</a></div>
+            <div><a href="#" class="stkr-target" data-color="color3">テスト3</a></div>
+        </div>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+        <script type="text/javascript">
+            const mouseStalker = "#stkr";
+            const mouseTarget = ".stkr-target";
+            const mouseStalkerArea = window;
+
+            const stkrSize = parseInt($(mouseStalker).css("width").replace(/px/,""));
+            const stkrPosX = parseInt($(mouseStalker).css("left").replace(/px/,""));
+            const stkrPosY = parseInt($(mouseStalker).css("top").replace(/px/,""));
+            const cssPosAjust = stkrPosX + (stkrSize / 2);
+
+            let stkrFix = false;
+            let scale = 1;
+            let scroll = 0;
+
+            $(mouseStalkerArea).hover(function(){
+                $(mouseStalkerArea).mousemove(function(e){
+                    if(stkrFix == false){
+                        let x = e.clientX - cssPosAjust;
+                        let y = e.clientY + scroll - cssPosAjust;
+                        $(mouseStalker).css({
+                            "transform": "translate(" + x + "px," + y + "px) scale(" + scale + ")",
+                        });
+                    }
+                });
+            }, function(){
+                $(mouseStalker).css({
+                    "transform": ""
+                });
+            });
+
+            $(mouseTarget).hover(function(){
+                stkrFix = true;
+                scale = 1.5;
+                let _width = parseInt($(this).css("width").replace(/px/,""));
+                let _top = $(this).position().top;
+                let _left = $(this).position().left;
+                let x = _left - stkrPosX - (stkrSize / 2) + (_width / 2);
+                let y = _top - stkrPosX;
+                $(mouseStalker).css({
+                    "transform": "translate(" + x + "px," + y + "px) scale(" + scale + ")",
+                }).addClass($(this).data("color"));
+            }, function(){
+                stkrFix = false;
+                scale = 1;
+                $(mouseStalker).removeClass($(this).data("color"));
+            });
+
+            $(window.scroll)(function(){
+                scroll = $(window).scrollTop();
+            });
+        </script>
+    </body>
+</html>

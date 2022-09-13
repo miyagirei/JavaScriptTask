@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+    <body>
+        <div class="titlestr">
+            <p>ランダム数値生成</p>
+        </div>
+
+        <div class="text-style">
+            <h1 id="msg"></h1>
+        </div>
+
+        <div class="button-normal">
+            <button id="startButton">Start</button>
+            <button id="stopButton">Stop</button>
+        </div>
+
+        <script>
+            let isStop = true;
+
+            let startButton = document.getElementById("startButton");
+            let stopButton = document.getElementById("stopButton");
+
+            startButton.addEventListener("click", start);
+            stopButton.addEventListener("click", stop);
+
+            const elem = document.querySelector("#msg");
+            let number = Math.floor(Math.random() * 31);
+
+            function start(){
+                if(!isStop)return;
+                isStop = false;
+                const intro = setInterval(function(){
+                    elem.textContent = number;
+                    number = Math.floor(Math.random() * 31);
+                    if(isStop){clearInterval(intro);}
+                }, 100);
+            }
+
+            function stop(){
+                isStop = true;
+            }
+        </script>
+    </body>
+</html>
